@@ -398,6 +398,25 @@ docker run --rm -it -w /<PROJECT>/ -v <YOUR PROJECT PATH>/<PROJECT>:/<PROJECT> s
 
 **Note:** the current working directory needs to be set with `-w` option in order to get successfully resolved the dependencies from go module file
 
+#### Enable `gosec` to pull dependencies from private repositories
+
+In case your local Go project has dependencies located in private repositories, you need to provide additional parameters to the `docker run` command.
+
+- `.gitconfig` (gitconfig file specifiying URL to pull dependencies from, e.g. `git@your-company-git-repo.com` insteadOf https://your-company-git-repo.com)` 
+- `host-ips` (a list of hosts IPs of private repository (e.g. IP of `your-company-git-repo`), seperated by colon `,`)
+- `ssh-key` (ssh-key with read-priviledges for referenced private repositories) 
+
+```command
+$ docker run --rm -it -w /<PROJECT>/ -v <YOUR PROJECT PATH>/<PROJECT>:/<PROJECT> securego/gosec /<PROJECT>/...
+```
+required:
+-e HOST_IP (env-var)
+-e SSH_KEY (env-var)
+-w GIT_CONFIG (mountpoint)
+
+optional:
+- GOPROXY
+
 ### Generate TLS rule
 
 The configuration of TLS rule can be generated from [Mozilla's TLS ciphers recommendation](https://statics.tls.security.mozilla.org/server-side-tls-conf.json).
